@@ -1,6 +1,6 @@
 from tkinter import messagebox
 from tkinter.constants import END
-from models.Customers import Customers
+#from models.Customers import Customers
 from core.Controller import Controller
 
 
@@ -13,7 +13,7 @@ class AddController(Controller):
     #-----------------------------------------------------------------------
     def __init__(self):
         self.addView = self.loadView("add")
-        self.customers = Customers()
+        #self.customers = Customers()
         
         
     #-----------------------------------------------------------------------
@@ -34,8 +34,8 @@ class AddController(Controller):
         @param fields Fields with customer data
     """
     def btn_add(self, fields):
-        response = self.customers.add(fields)
-        
+        #response = self.customers.add(fields)
+        response = 0
         if response > 0:
             messagebox.showinfo("Add customer", "Customer successfully added!")
         else:

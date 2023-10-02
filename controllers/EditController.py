@@ -1,5 +1,5 @@
 from tkinter import messagebox
-from models.Customers import Customers
+#from models.Customers import Customers
 from core.Controller import Controller
 
 
@@ -12,7 +12,7 @@ class EditController(Controller):
     #-----------------------------------------------------------------------
     def __init__(self):
         self.editView = self.loadView("edit")
-        self.customers = Customers()
+        #self.customers = Customers()
         
         
     #-----------------------------------------------------------------------
@@ -23,22 +23,26 @@ class EditController(Controller):
     """
     def main(self, customer, showView):
         self.showView = showView
-        self.customer = customer
+    #    self.customer = customer
         self.editView.main()
     
     """
         @return Customer being edited
     """
     def getCustomer(self):
-        return self.customer
+        
+        #return self.customer
+        return None
     
+
     """
         Saves customer edited
         
         @param fields Customer data edited
     """
     def btnSave(self, fields):
-        response = self.customers.update(fields)
+        #response = self.customers.update(fields)
+        response = 0
         self.showView.attributes("-topmost", False)
         if response > 0:
             messagebox.showinfo("Update customer", "Customer updated with success!")
