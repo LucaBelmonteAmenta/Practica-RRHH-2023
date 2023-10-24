@@ -16,11 +16,15 @@ class Model():
     #       estructuraTabla[?] == item
     #----------------------------------------------------------------------- 
     
-    def __init__(self, estructuraTabla):
+    def __init__(self, estructuraTabla, automaticSimpleId):
         
         conexion = sqlite3.connect(path_data_base+nombre_base_datos)
 
-        campos_tabla = ""
+        if automaticSimpleId == True:
+            campos_tabla = "Id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        else:
+            campos_tabla = ""
+        
         for item in estructuraTabla:
             if item[2] == False:
                 null = "NOT NULL"
@@ -30,7 +34,7 @@ class Model():
         
         campos_tabla = campos_tabla[:-2]
         nombre_clase = type(self).__name__
-        comandoSQL = f"CREATE TABLE IF NOT EXISTS {nombre_clase} (Id INTEGER PRIMARY KEY AUTOINCREMENT, {campos_tabla});"
+        comandoSQL = f"CREATE TABLE IF NOT EXISTS {nombre_clase} ({campos_tabla});"
 
         cursor = conexion.cursor()
         cursor.execute(comandoSQL)
@@ -87,7 +91,10 @@ class Model():
         nombre_clase = type(self).__name__
         comandoSQL = f"INSERT INTO {nombre_clase} ({campos}) VALUES({valores}); " 
 
+        #print(comandoSQL)
+
         self.RunCommand(comandoSQL, tuple(data.values()))
+
 
     
     def GetAllData(self):
