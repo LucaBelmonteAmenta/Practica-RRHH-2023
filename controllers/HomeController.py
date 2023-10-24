@@ -21,14 +21,14 @@ class HomeController(Controller):
         Opens controller according to the option chosen
     """
     def btnClicked(self, caption):
-        if caption == "Open Customers DB":
-            c = Core.openController("show")
+        if caption == "Busqueda de Personal":
+            c = Core.openController("Show")
             c.main()
-        elif caption == "Add customer":
-            c = Core.openController("add")
+        elif caption == "Resgistrar nueva persona":
+            c = Core.openController("AddPersona")
             c.main()
-        elif caption == "Show customers with TreeView":
-            c = Core.openController("showTree")
+        elif caption == "Administrador de Competencias":
+            c = Core.openController("ShowCompetencias")
             c.main()
             
     """

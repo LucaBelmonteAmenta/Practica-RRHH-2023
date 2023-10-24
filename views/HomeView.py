@@ -13,9 +13,9 @@ class HomeView(tk.Tk, View):
     #-----------------------------------------------------------------------
     PAD = 10
     BTN_CAPTION = [
-        "Open Customers DB",
-        "Show customers with TreeView",
-        "Add customer",
+        "Busqueda de Personal",
+        "Resgistrar nueva persona",
+        "Administrador de Competencias",
         "Exit"
     ]
     
@@ -28,7 +28,7 @@ class HomeView(tk.Tk, View):
     """
     def __init__(self, controller):
         super().__init__()
-        self.title("Customers Manager")
+        self.title("Practica de RRHH (2023)")
         self.homeController = controller
         
         self._make_mainFrame()
@@ -50,7 +50,7 @@ class HomeView(tk.Tk, View):
         Sets view's title.
     """
     def _make_title(self):
-        title = ttk.Label(self.mainFrame, text="Customers Manager", font=("Helvetica", 20))
+        title = ttk.Label(self.mainFrame, text="Administración del Inventario de Recursos Humanos", font="Helvetica 11 bold ")
         title.pack(padx=self.PAD, pady=self.PAD)
         
     """
