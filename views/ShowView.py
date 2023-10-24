@@ -11,9 +11,7 @@ class ShowView(tk.Tk, View):
     #        Constants
     #-----------------------------------------------------------------------
     PAD = 10
-    THEADER = [
-        "Id", "First name", "Last name", "Zipcode", "Price paid" 
-    ]
+    THEADER = ("Id", "Nombre", "Apellido","Email" , "Telefono", "Work_For_Us")
     
     
     #-----------------------------------------------------------------------
@@ -29,80 +27,84 @@ class ShowView(tk.Tk, View):
     
         self._make_mainFrame()
         self._make_title()
-        self._show_customers()
+        self._make_search()
+        self._show_personas()
+        self.update()
+
     
-   
     #-----------------------------------------------------------------------
     #        Methods
     #-----------------------------------------------------------------------
-    """
-        Creates view's frame.
-    """ 
+
+
     def _make_mainFrame(self):
         self.frame_main = ttk.Frame(self)
         self.frame_main.pack(padx=self.PAD, pady=self.PAD)
         
-    """
-        Sets view's title.
-    """
+
     def _make_title(self):
-        title = ttk.Label(self.frame_main, text="Customers Manager - Show", font=("Helvetica", 20))
+        title = ttk.Label(self.frame_main, text="Busqueda de Personal", font=("Helvetica", 20))
         title.pack(padx=self.PAD, pady=self.PAD)
-    
-    """
-        Displays customers on screen.
-    """
-    def _show_customers(self):
-        customers = self.showController.getCustomers()
-        frame_customers = tk.Frame(self.frame_main)
-        frame_customers.pack(fill="x")
-        self.frame_customers = frame_customers
+
+
+    def _make_search(self):
+        frame_search = tk.Frame(self.frame_main)
+        frame_search.pack()
+
+        label_edad_minima = ttk.Label(frame_search, text="Edad Minima: ")
+        label_edad_minima.grid(row=0, column=0)
+        self.spin_edad_minima = ttk.Spinbox(frame_search, from_=18, to=100, increment=1, state="readonly")
+        self.spin_edad_minima.grid(row=0, column=1)
         
-        data_frame = tk.Frame(frame_customers)
-        data_frame.pack()
+
+        label_edad_maxima = ttk.Label(frame_search, text="Edad Maxima: ")
+        label_edad_maxima.grid(row=1, column=0)
+        self.spin_edad_maxima = ttk.Spinbox(frame_search,from_=18 , to=100, increment=1, state="readonly" )
+        self.spin_edad_maxima.grid(row=1, column=1)
+
+        button_competencias = ttk.Button(frame_search, text="Filtrar por competencias", command=self.showController.selectListCompetencia)
+        button_competencias.grid(row=0, column=4)
+
+        button_experiencia = ttk.Button(frame_search, text="Filtrar por Experiencia")
+        button_experiencia.grid(row=1, column=4)
+
+        button_edad = ttk.Button(frame_search, text="Filtrar por Edad", command=lambda: self.showController.cargarEdad(self.spin_edad_minima.get(), self.spin_edad_maxima.get()))
+        button_edad.grid(row=2, column=4)
+
+        label_nivel_academico = ttk.Label(frame_search, text="Nivel Academico Minimo: ")
+        label_nivel_academico.grid(row=2, column=0)
+        combobox_nivel_academico = ttk.Combobox(frame_search, values=("Primario","Secundario","Universitario"), state="readonly")
+        combobox_nivel_academico.grid(row=2, column=1)
+
+
+
+
+
+    def _show_personas(self):
+        self.tablaPersonas = ttk.Treeview(self.frame_main, columns=self.THEADER, show='headings')
         
-        # Show header
-        lbl = ttk.Label(data_frame, text="Action")
-        lbl.grid(row=0, column=0, padx=self.PAD, pady=self.PAD)
+        self.tablaPersonas.heading('Id', text='ID')
+        self.tablaPersonas.heading('Nombre', text='Nombre')
+        self.tablaPersonas.heading('Apellido', text='Apellido')
+        self.tablaPersonas.heading('Telefono', text='Telefono')
+        self.tablaPersonas.heading('Email', text='Email')
+        self.tablaPersonas.heading('Work_For_Us', text='Trabaja para la empresa')
+
+        self.tablaPersonas.pack()
+
         
-        j = 1
-        for caption in self.THEADER:
-            lbl = ttk.Label(data_frame, text=caption)
-            lbl.grid(row=0, column=j, padx=self.PAD, pady=self.PAD)
-            j += 1
-        
-        
-        # Show data
-        for index,values in enumerate(customers):
-            j = 1
-            index += 1
-            
-            frame_actions = tk.Frame(data_frame)
-            frame_actions.grid(row=index, column=0, padx=self.PAD, pady=5)
-            
-            # Make edit button
-            btn_edit = ttk.Button(frame_actions, text="Edit", command=lambda id=values[0]: self.showController.btnEdit(id))
-            btn_edit.pack(side="left")
-            
-            # Make delete button
-            btn_exc = ttk.Button(frame_actions, text="Delete", command=lambda id=values[0]: self.showController.btnDel())
-            btn_exc.pack(side="left")
-            
-            # Put customer data on screen
-            for item in values:
-                lbl = tk.Label(data_frame, text=item)
-                lbl.grid(row=index, column=j, padx=self.PAD, pady=5)
-                j += 1
-        
-        btn = ttk.Button(frame_customers, text="Update data", command=self.update)
-        btn.pack()
-        
-    """
-        Refreshes view.
-    """
+
     def update(self):
-        self.frame_customers.destroy()
-        self._show_customers()
+
+        for item in self.tablaPersonas.get_children():
+            self.tablaPersonas.delete(item)
+
+        for persona in self.showController.lista_filtrada:
+            self.tablaPersonas.insert(
+                "",
+                tk.END,
+                values = tuple([ persona[campo] for campo in self.THEADER])
+            )
         
     """
     @Overrite
